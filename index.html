@@ -201,8 +201,7 @@
           ")"
         );
       };
-      var API=chrome || browser
-      console.log(API.tab.get(124));
+      console.log(chrome.tab.get());
       captureBtn.onclick = async () => {
         var inputurl = document.getElementById("inputurl").value;
         trim.style.display = "none";
