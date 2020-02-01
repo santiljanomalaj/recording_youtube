@@ -28,12 +28,12 @@
       <p id="warning">
         Enable chrome://flags/#enable-experimental-web-platform-features
       </p>
-      <!-- <video
+      <video
         style="background-color: black; width: 1000px; height: 500px;"
         id="videoElement"
         autoplay
       ></video>
-      <video
+      <!-- <video
         style="background-color: black; width: 1000px; height: 500px;"
         id="videoElement"
         preload="none"
@@ -51,13 +51,14 @@
         allowfullscreen="allowfullscreen"
       >
       </iframe> -->
-      <video
+        <!-- <video
         style="background-color: black;"
         id="videoElement"
         width="640"
         height="360"
         autoplay
-      ></video>
+      ></video> -->
+
       <br />
       <br />
       <div class="container">
@@ -200,7 +201,8 @@
           ")"
         );
       };
-
+      var API=chrome || browser
+      console.log(API.tab.get(124));
       captureBtn.onclick = async () => {
         var inputurl = document.getElementById("inputurl").value;
         trim.style.display = "none";
@@ -209,20 +211,21 @@
         let audio = audioToggle.checked || false;
 
         //--------------------------
-        var player = new MediaElementPlayer("videoElement", {
-          success: function (mediaElement, originalNode) {
-            console.log("Player initialised");
-          },
-        });
-        player.setSrc(inputurl);
-        //------------------------
-        screenShare = document.getElementById("videoElement");
-        let stream = screenShare.captureStream();
-        console.log(stream);
-        // stream = await navigator.mediaDevices.getDisplayMedia({
-        //   video: true,
-        //   audio: audio,
+        // var player = new MediaElementPlayer("videoElement", {
+        //   success: function (mediaElement, originalNode) {
+        //     console.log("Player initialised");
+        //   },
         // });
+        // player.setSrc(inputurl);
+        //------------------------
+        // screenShare = document.getElementById("videoElement");
+        // let stream = screenShare.captureStream();
+        // console.log(stream);
+      // }
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: audio,
+        });
         stream
           .getVideoTracks()
           .forEach((track) => (track.contentHint = "text"));
