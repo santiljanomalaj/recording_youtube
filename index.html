@@ -201,14 +201,13 @@
           ")"
         );
       };
-      console.log(chrome.tab.get());
       captureBtn.onclick = async () => {
         var inputurl = document.getElementById("inputurl").value;
         trim.style.display = "none";
         convert.style.display = "none";
         download.style.display = "none";
         let audio = audioToggle.checked || false;
-
+        window.open(inputurl);
         //--------------------------
         // var player = new MediaElementPlayer("videoElement", {
         //   success: function (mediaElement, originalNode) {
@@ -216,11 +215,11 @@
         //   },
         // });
         // player.setSrc(inputurl);
-        //------------------------
+        // // ------------------------
         // screenShare = document.getElementById("videoElement");
         // let stream = screenShare.captureStream();
         // console.log(stream);
-      // }
+
         stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
           audio: audio,
