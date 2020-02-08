@@ -213,22 +213,7 @@
           video: true,
           audio: audio,
         });
-        stream
-          .getVideoTracks()
-          .forEach((track) => (track.contentHint = "text"));
-        videoElement.srcObject = stream;
-        console.log(stream);
-        let opts = { mimeType: "video/webm; codecs=h264" };
-        blobs = [];
-        rec = new MediaRecorder(stream, opts);
-        rec.ondataavailable = (e) => blobs.push(e.data);
-        rec.onstop = () => {
-          blob = new Blob(blobs, { type: "video/mp4" });
-          let url = window.URL.createObjectURL(blob);
-          let today = new Date();
-          download.href = url;
-          download.download = curday("/", ":") + ".mp4";
-          download.style.display = "block";
+ 
           trim.style.display = "block";
           convert.style.display = "block";
         };
