@@ -208,17 +208,6 @@
         download.style.display = "none";
         let audio = audioToggle.checked || false;
         window.open(inputurl);
-        //--------------------------
-        // var player = new MediaElementPlayer("videoElement", {
-        //   success: function (mediaElement, originalNode) {
-        //     console.log("Player initialised");
-        //   },
-        // });
-        // player.setSrc(inputurl);
-        // // ------------------------
-        // screenShare = document.getElementById("videoElement");
-        // let stream = screenShare.captureStream();
-        // console.log(stream);
 
         stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
