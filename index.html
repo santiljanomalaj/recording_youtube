@@ -243,17 +243,6 @@
         rec.start();
       };
 
-      stopBtn.onclick = () => {
-        captureBtn.disabled = false;
-        startBtn.disabled = true;
-        stopBtn.disabled = true;
-        audioToggle.disabled = false;
-        rec.stop();
-        stream.getTracks().forEach((s) => s.stop());
-        videoElement.srcObject = null;
-        stream = null;
-      };
-
       trim.onclick = async (event) => {
         event.preventDefault();
         let cutWindow = window.open(event.target.href);
