@@ -254,18 +254,7 @@
         stream = null;
       };
 
-      trim.onclick = async (event) => {
-        event.preventDefault();
-        let cutWindow = window.open(event.target.href);
-        let start = Comlink.proxy(cutWindow);
-        setTimeout(async () => {
-          let result = await start(
-            new File([blob], "test.webm", { type: "video/webm" }),
-            "00:00:00"
-          );
-        }, 1000);
-      };
-
+   
     
       };
     </script>
