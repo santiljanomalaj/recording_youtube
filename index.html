@@ -25,7 +25,78 @@
         <h1 class="w3-jumbo">&nbsp Welcome to you &nbsp</h1>
         <!-- </u> -->
       </div>
-   
+      <p id="warning">
+        Enable chrome://flags/#enable-experimental-web-platform-features
+      </p>
+      <video
+        style="background-color: black; width: 1000px; height: 500px;"
+        id="videoElement"
+        autoplay
+      ></video>
+      <br />
+      <br />
+      <div class="container">
+        <div class="form-inline" style="margin-left: 6%;">
+          <div class="input-group custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="audioToggle"
+            />
+            <label class="custom-control-label" for="audioToggle"
+              >Record Audio &nbsp&nbsp</label
+            >
+          </div>
+          <div class="input-group" style="width: 510px;">
+            <input
+              id="inputurl"
+              type="text"
+              class="form-control"
+              placeholder="Please input url"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">https://example/</span>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+      <br />
+
+      <div class="container">
+        <div class="form-inline" style="margin-left: 25%;">
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-dark"
+                id="download"
+                href="#"
+                style="display: none;"
+                >Download</a
+              >
+            </div>
+          </div>
+
+          <br />
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-secondary"
+                id="trim"
+                href="https://video-cut.glitch.me/"
+                style="display: none;"
+                target="trim"
+                >Trim Video</a
+              >
+            </div>
+          </div>
+
+          <br />
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-secondary"
+                id="convert"
                 href="https://convert-to-mp4.glitch.me/"
                 style="display: none;"
                 target="convert"
