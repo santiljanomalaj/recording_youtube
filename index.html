@@ -154,11 +154,11 @@
         audioToggle.disabled = true;
       };
 
-      // startBtn.onclick = () => {
-      //   startBtn.disabled = true;
-      //   stopBtn.disabled = false;
-      //   rec.start();
-      // };
+      startBtn.onclick = () => {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        rec.start();
+      };
 
       stopBtn.onclick = () => {
         captureBtn.disabled = false;
