@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>video/audio capture</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Tangerine"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- <script>
+      if (location.protocol !== "https:") location.protocol = "https:";
+    </script> -->
+    <!-- import the webpage's stylesheet -->
+  </head>
+  <body>
+    <center>
+      <div class="w3-container w3-tangerine">
+        <!-- <u style="color: red;"> -->
+        <h1 class="w3-jumbo">&nbsp Welcome to you &nbsp</h1>
+        <!-- </u> -->
+      </div>
+      <p id="warning">
+        Enable chrome://flags/#enable-experimental-web-platform-features
+      </p>
+      <!-- <video
+        style="background-color: black; width: 1000px; height: 500px;"
+        id="videoElement"
+        autoplay
+      ></video> -->
+      <iframe
+        id="screenShare"
+        src=""
+        style="background-color: black; width: 1000px; height: 500px;"
+        allowfullscreen="allowfullscreen"
+      >
+      </iframe>
+      <br />
+      <br />
+      <div class="container">
+        <div class="form-inline" style="margin-left: 6%;">
+          <div class="input-group custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="audioToggle"
+            />
+            <label class="custom-control-label" for="audioToggle"
+              >Record Audio &nbsp&nbsp</label
+            >
+          </div>
+          <div class="input-group" style="width: 510px;">
+            <input
+              id="inputurl"
+              type="text"
+              class="form-control"
+              placeholder="Please input url"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">https://example/</span>
+            </div>
+          </div>
+          <button type="button" id="captureBtn" class="btn btn-primary">
+            Go to
+          </button>
+          <button class="btn btn-info" id="startBtn" disabled>
+            Start Recording
+          </button>
+          <button class="btn btn-danger" id="stopBtn" disabled>
+            Stop Capture
+          </button>
+        </div>
+        <!-- <div class="form-inline" style="margin-left: 20%;">
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <button class="btn btn-danger" id="captureBtn">Capture</button>
+          </div>
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <button class="btn btn-primary" id="startBtn" disabled>
+              Start Recording
+            </button>
+          </div>
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <button class="btn btn-info" id="stopBtn" disabled>
+              Stop Capture
+            </button>
+          </div>
+        </div> -->
+      </div>
+      <br />
+
+      <div class="container">
+        <div class="form-inline" style="margin-left: 25%;">
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-dark"
+                id="download"
+                href="#"
+                style="display: none;"
+                >Download</a
+              >
+            </div>
+          </div>
+
+          <br />
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-secondary"
+                id="trim"
+                href="https://video-cut.glitch.me/"
+                style="display: none;"
+                target="trim"
+                >Trim Video</a
+              >
+            </div>
+          </div>
+
+          <br />
+          <div class="custom-control custom-checkbox mb-2 mr-sm-2">
+            <div style="width: 150px;">
+              <a
+                class="btn btn-secondary"
+                id="convert"
+                href="https://convert-to-mp4.glitch.me/"
+                style="display: none;"
+                target="convert"
+                >Convert to MP4</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </center>
+
+    <!-- <script src="./js/comlink.js"></script> -->
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+    <script>
+      if ("getDisplayMedia" in navigator.mediaDevices)
+        warning.style.display = "none";
+
+      let blobs;
+      let blob;
+      let rec;
+      let stream;
+
+      var curday = function (sp, ti) {
+        today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //As January is 0.
+        var yyyy = today.getFullYear();
+        var hours = today.getHours();
+        var minutes = today.getMinutes();
+        var seconds = today.getSeconds();
+
+        if (dd < 10) dd = "0" + dd;
+        if (mm < 10) mm = "0" + mm;
+        if (hours < 10) hours = "0" + hours;
+        if (minutes < 10) minutes = "0" + minutes;
+        if (seconds < 10) seconds = "0" + seconds;
+        return (
+          mm +
+          sp +
+          dd +
+          sp +
+          yyyy +
+          "(" +
+          hours +
+          ti +
+          minutes +
+          ti +
+          seconds +
+          ")"
+        );
+      };
+
+      captureBtn.onclick = async () => {
+        var inputurl = document.getElementById("inputurl").value;
+        trim.style.display = "none";
+        convert.style.display = "none";
+        download.style.display = "none";
+        let audio = audioToggle.checked || false;
+        let screenShareUrl = inputurl.replace("watch?v=", "embed/");
+        $("#screenShare").attr("src", screenShareUrl);
+        console.log(screenShareUrl);
+        screenShare = document.getElementById("screenShare");
+        console.log(screenShare);
+        // let stream = screenShare.captureStream();
+        stream = screenShare.captureStream();
+        // stream = await navigator.mediaDevices.getDisplayMedia({
+        //   video: true,
+        //   audio: audio,
+        // });
+        console.log(stream);
+        stream
+          .getVideoTracks()
+          .forEach((track) => (track.contentHint = "text"));
+        videoElement.srcObject = stream;
+        console.log(stream);
+        let opts = { mimeType: "video/webm; codecs=h264" };
+        blobs = [];
+        rec = new MediaRecorder(stream, opts);
+        rec.ondataavailable = (e) => blobs.push(e.data);
+        rec.onstop = () => {
+          blob = new Blob(blobs, { type: "video/mp4" });
+          let url = window.URL.createObjectURL(blob);
+          let today = new Date();
+          download.href = url;
+          download.download = curday("/", ":") + ".mp4";
+          download.style.display = "block";
+          trim.style.display = "block";
+          convert.style.display = "block";
+        };
+        startBtn.disabled = false;
+        captureBtn.disabled = true;
+        audioToggle.disabled = true;
+      };
+
+      startBtn.onclick = () => {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        rec.start();
+      };
+
+      stopBtn.onclick = () => {
+        captureBtn.disabled = false;
+        startBtn.disabled = true;
+        stopBtn.disabled = true;
+        audioToggle.disabled = false;
+        rec.stop();
+        stream.getTracks().forEach((s) => s.stop());
+        videoElement.srcObject = null;
+        stream = null;
+      };
+
+      trim.onclick = async (event) => {
+        event.preventDefault();
+        let cutWindow = window.open(event.target.href);
+        let start = Comlink.proxy(cutWindow);
+        setTimeout(async () => {
+          let result = await start(
+            new File([blob], "test.webm", { type: "video/webm" }),
+            "00:00:00"
+          );
+        }, 1000);
+      };
+
+      convert.onclick = async (event) => {
+        event.preventDefault();
+        let convertWindow = window.open(event.target.href);
+        let start = Comlink.proxy(convertWindow);
+        setTimeout(async () => {
+          let result = await start(
+            new File([blob], "test.webm", { type: "video/webm" })
+          );
+        }, 1000);
+      };
+    </script>
+  </body>
+</html>

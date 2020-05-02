@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>video/audio capture</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Tangerine"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- <script>
+      if (location.protocol !== "https:") location.protocol = "https:";
+    </script> -->
+    <!-- import the webpage's stylesheet -->
+  </head>
+  <body>
+    <center>
+      <div class="w3-container w3-tangerine">
+        <u class="w3-xxlarge" style="color: red;"
+          ><h1 class="w3-jumbo">&nbsp Welcome to you &nbsp</h1></u
+        >
+      </div>
+      <p id="warning">
+        Enable chrome://flags/#enable-experimental-web-platform-features
+      </p>
+      <video
+        style="background-color: black; width: 1000px; height: 500px;"
+        id="videoElement"
+        autoplay
+      ></video>
+      <br />
+      <button id="captureBtn">Capture</button>
+      <button id="startBtn" disabled>Start Recording</button>
+      <button id="stopBtn" disabled>Stop Capture</button>
+      <input type="checkbox" id="audioToggle" />
+      <label for="audioToggle">Record Audio</label>
+      <a class="btn btn-primary" id="download" href="#" style="display: none;"
+        >Download</a
+      >
+      <a
+        type="button"
+        class="btn btn-primary"
+        id="trim"
+        href="https://video-cut.glitch.me/"
+        style="display: none;"
+        target="trim"
+        >Trim Video</a
+      >
+      <a
+        type="button"
+        class="btn btn-primary"
+        id="convert"
+        href="https://convert-to-mp4.glitch.me/"
+        style="display: none;"
+        target="convert"
+        >Convert to MP4</a
+      >
+    </center>
+
+    <script src="./js/comlink.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+      if ("getDisplayMedia" in navigator.mediaDevices)
+        warning.style.display = "none";
+
+      let blobs;
+      let blob;
+      let rec;
+      let stream;
+
+      captureBtn.onclick = async () => {
+        trim.style.display = "none";
+        convert.style.display = "none";
+        download.style.display = "none";
+        let audio = audioToggle.checked || false;
+
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: audio,
+        });
+        stream
+          .getVideoTracks()
+          .forEach((track) => (track.contentHint = "text"));
+        videoElement.srcObject = stream;
+        let opts = { mimeType: "video/webm; codecs=h264" };
+        blobs = [];
+        rec = new MediaRecorder(stream, opts);
+        rec.ondataavailable = (e) => blobs.push(e.data);
+        rec.onstop = () => {
+          blob = new Blob(blobs, { type: "video/mp4" });
+          let url = window.URL.createObjectURL(blob);
+          download.href = url;
+          download.download = "test.mp4";
+          download.style.display = "block";
+          trim.style.display = "block";
+          convert.style.display = "block";
+        };
+        startBtn.disabled = false;
+        captureBtn.disabled = true;
+        audioToggle.disabled = true;
+      };
+
+      startBtn.onclick = () => {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        rec.start();
+      };
+
+      stopBtn.onclick = () => {
+        captureBtn.disabled = false;
+        startBtn.disabled = true;
+        stopBtn.disabled = true;
+        audioToggle.disabled = false;
+        rec.stop();
+        stream.getTracks().forEach((s) => s.stop());
+        videoElement.srcObject = null;
+        stream = null;
+      };
+
+      trim.onclick = async (event) => {
+        event.preventDefault();
+        let cutWindow = window.open(event.target.href);
+        let start = Comlink.proxy(cutWindow);
+        setTimeout(async () => {
+          let result = await start(
+            new File([blob], "test.webm", { type: "video/webm" }),
+            "00:00:00"
+          );
+        }, 1000);
+      };
+
+      convert.onclick = async (event) => {
+        event.preventDefault();
+        let convertWindow = window.open(event.target.href);
+        let start = Comlink.proxy(convertWindow);
+        setTimeout(async () => {
+          let result = await start(
+            new File([blob], "test.webm", { type: "video/webm" })
+          );
+        }, 1000);
+      };
+    </script>
+  </body>
+</html>
