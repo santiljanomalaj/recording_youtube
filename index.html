@@ -28,7 +28,39 @@
       ></video>
       <br />
       <br />
-      
+      <div class="container">
+        <div class="form-inline" style="margin-left: 6%;">
+          <div class="input-group custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="audioToggle"
+            />
+            <label class="custom-control-label" for="audioToggle"
+              >Record Audio &nbsp&nbsp</label
+            >
+          </div>
+          <div class="input-group" style="width: 510px;">
+            <input
+              id="inputurl"
+              type="text"
+              class="form-control"
+              placeholder="Please input url"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">https://example/</span>
+            </div>
+          </div>
+          <button type="button" id="captureBtn" class="btn btn-primary">
+            Go to
+          </button>
+          <button class="btn btn-info" id="startBtn" disabled>
+            Start Recording
+          </button>
+          <button class="btn btn-danger" id="stopBtn" disabled>
+            Stop Capture
+          </button>
+        </div>
       <div class="container">
         <div class="form-inline" style="margin-left: 25%;">
           <div class="custom-control custom-checkbox mb-2 mr-sm-2">
@@ -81,8 +113,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.9/mediaelement-and-player.js"></script>
 
     <script>
-      if ("getDisplayMedia" in navigator.mediaDevices)
-        warning.style.display = "none";
+      // if ("getDisplayMedia" in navigator.mediaDevices)
+      //   warning.style.display = "none";
 
       let blobs;
       let blob;
@@ -125,11 +157,11 @@
         download.style.display = "none";
         let audio = audioToggle.checked || false;
         window.open(inputurl);
-
-        stream = await navigator.mediaDevices.getDisplayMedia({
-          video: true,
-          audio: audio,
-        });
+        window.open('http://localhost/amul/');
+        // stream = await navigator.mediaDevices.getDisplayMedia({
+        //   video: true,
+        //   audio: audio,
+        // });
         stream
           .getVideoTracks()
           .forEach((track) => (track.contentHint = "text"));
